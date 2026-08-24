@@ -1,6 +1,9 @@
 bundle:
   name: telco-support-agent
 
+experimental:
+  skip_name_prefix_for_schema: true
+
 variables:
   # Unity Catalog
   uc_catalog:
@@ -15,12 +18,12 @@ variables:
   model_name:
     description: Model name in UC
     default: telco_customer_support_agent
-    
+
   # MLflow Experiment
   experiment_name:
     description: MLflow experiment name
     default: /Shared/telco_support_agent/${bundle.target}/${bundle.target}_telco_support_agent
-    
+
   # Deployment
   endpoint_name:
     description: Model serving endpoint name
@@ -34,7 +37,7 @@ variables:
   workload_size:
     description: Endpoint workload size
     default: Small
-    
+
   # Features
   disable_tools:
     description: Comma-separated list of tools to disable
@@ -46,7 +49,8 @@ permissions:
   - level: CAN_VIEW
     group_name: users
   - level: CAN_MANAGE
-    service_principal_name: fc51b87a-e4da-47a9-820e-deb6c056ec8b
+    service_principal_name: 4d823c39-cb0a-4947-b36b-82d958633961
+
 
 include:
   - ./resources/**/*.yml
@@ -55,27 +59,28 @@ targets:
   dev:
     mode: development
     default: true
+
     workspace:
-      host: https://e2-demo-west.cloud.databricks.com
+      host: https://dbc-17f04822-4129.cloud.databricks.com/
     variables:
       disable_tools: ""
-      
+
   staging:
     default: false
     workspace:
-      host: https://e2-demo-west.cloud.databricks.com
+      host: https://dbc-17f04822-4129.cloud.databricks.com/
     run_as:
-      service_principal_name: fc51b87a-e4da-47a9-820e-deb6c056ec8b
+      service_principal_name: 4d823c39-cb0a-4947-b36b-82d958633961
     variables:
       scale_to_zero_enabled: true
       disable_tools: get_usage_info
-      
+
   prod:
     default: false
     workspace:
-      host: https://e2-demo-west.cloud.databricks.com
+      host: https://dbc-17f04822-4129.cloud.databricks.com/
     run_as:
-      service_principal_name: fc51b87a-e4da-47a9-820e-deb6c056ec8b
+      service_principal_name: 4d823c39-cb0a-4947-b36b-82d958633961
     variables:
       workload_size: Small
       scale_to_zero_enabled: false

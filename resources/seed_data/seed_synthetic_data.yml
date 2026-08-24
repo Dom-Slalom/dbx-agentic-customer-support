@@ -1,0 +1,32 @@
+resources:
+
+  schemas:
+    telco_data_schema:
+      name: ${var.data_schema}
+      catalog_name: ${var.uc_catalog}
+      comment: "Schema for synthetic Telco customer support data"
+
+  jobs:
+    create_dataset:
+      name: telco_create_dataset_${bundle.target}
+      tasks:
+        - task_key: create_dataset
+          notebook_task:
+            notebook_path: ../../notebooks/00_data_generation/data_generation.py
+            base_parameters:
+              # Environment-specific parameters
+              env: ${bundle.target}
+              uc_catalog: ${var.uc_catalog}
+              data_schema: ${var.data_schema}
+              generate_all: "True"
+        - task_key: delta_to_volume
+          depends_on:
+            - task_key: create_dataset
+          notebook_task:
+            notebook_path: ../../notebooks/00_data_generation/delta_to_volume.py
+            base_parameters:
+              # Environment-specific parameters
+              env: ${bundle.target}
+              uc_catalog: ${var.uc_catalog}
+              data_schema: ${var.data_schema}
+              volume_schema: ${var.data_schema}

@@ -28,11 +28,6 @@ User interface application resources:
 
 ### Manual Deployment
 
-Deploy all resources to an environment:
-```bash
-databricks bundle deploy -t <environment>
-```
-
 Run specific jobs:
 ```bash
 databricks bundle run log_register_deploy_agent -t <environment>

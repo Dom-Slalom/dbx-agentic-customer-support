@@ -9,7 +9,7 @@ from typing import Any, Optional
 from databricks.sdk import WorkspaceClient
 from databricks_mcp import DatabricksOAuthClientProvider
 from mcp.client.session import ClientSession
-from mcp.client.streamable_http import streamablehttp_client
+from mcp.client.streamable_http import streamable_http_client
 from pydantic import BaseModel
 
 from telco_support_agent.agents.base_agent import BaseAgent
@@ -32,7 +32,7 @@ class ToolInfo(BaseModel):
 @asynccontextmanager
 async def mcp_session(server_url: str, workspace_client: WorkspaceClient):
     """Async context manager that yields an initialized MCP ClientSession."""
-    async with streamablehttp_client(
+    async with streamable_http_client(
         url=server_url, auth=DatabricksOAuthClientProvider(workspace_client)
     ) as (read_stream, write_stream, _):
         async with ClientSession(read_stream, write_stream) as session:

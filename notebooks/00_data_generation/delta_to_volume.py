@@ -3,7 +3,7 @@
 # MAGIC # Convert Delta Tables to Unity Catalog Volume
 # MAGIC
 # MAGIC Converts knowledge base and support ticket Delta tables to text files in Unity Catalog volumes.
-# MAGIC 
+# MAGIC
 # MAGIC Files will be organized as:
 # MAGIC - Knowledge Base: `/knowledge_base/{content_type}/{category}/{kb_id}.txt`
 # MAGIC - Support Tickets: `/support_tickets/{year}/{month}/{ticket_id}.txt`
@@ -34,19 +34,29 @@ if root_path:
 
 # COMMAND ----------
 
+dbutils.widgets.text("root_path", "")
+dbutils.widgets.text("env", "dev")
+dbutils.widgets.text("uc_catalog", "telco_customer_support_dev")
+dbutils.widgets.text("data_schema", "gold")
+dbutils.widgets.text("volume_schema", "gold")
+
+
+# COMMAND ----------
+
 env = "prod"
 
-volume_catalog = f"telco_customer_support_{env}"
-volume_schema = "gold"
+volume_catalog = dbutils.widgets.get("uc_catalog")
+volume_schema = dbutils.widgets.get("volume_schema")
 volume_name = "tech_support"
+data_schema = dbutils.widgets.get("data_schema")
 
 volume_path = f"/Volumes/{volume_catalog}/{volume_schema}/{volume_name}"
 print(f"Target volume path: {volume_path}")
 
 # Source tables
-source_catalog = f"telco_customer_support_{env}"
-kb_table = f"{source_catalog}.gold.knowledge_base"
-tickets_table = f"{source_catalog}.gold.support_tickets"
+source_catalog = dbutils.widgets.get("uc_catalog")
+kb_table = f"{source_catalog}.{data_schema}.knowledge_base"
+tickets_table = f"{source_catalog}.{data_schema}.support_tickets"
 
 print(f"Source tables:")
 print(f"  Knowledge Base: {kb_table}")
@@ -63,8 +73,8 @@ def ensure_directory_exists(directory_path: str) -> None:
         print(f"Error creating directory {directory_path}: {e}")
         raise
 
-def save_kb_article_to_volume(kb_id: str, title: str, content: str, 
-                             content_type: str, category: str, 
+def save_kb_article_to_volume(kb_id: str, title: str, content: str,
+                             content_type: str, category: str,
                              subcategory: str, tags: str, last_updated) -> str:
     """Save knowledge base article as text file to Unity Catalog volume."""
     try:
@@ -95,7 +105,7 @@ Generated: {datetime.now().isoformat()}
 
 {content}
 """
-        
+
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(file_content)
 
@@ -108,7 +118,7 @@ Generated: {datetime.now().isoformat()}
 def save_ticket_to_volume(ticket_id: str, customer_id: str, subscription_id: str,
                          category: str, priority: str, status: str,
                          description: str, resolution: str = None,
-                         created_date=None, resolved_date=None, 
+                         created_date=None, resolved_date=None,
                          agent_id: str = None) -> str:
     """Save a support ticket as a text file to Unity Catalog volume."""
     try:
@@ -148,7 +158,7 @@ Created: {created_date}
 
         if agent_id:
             file_content += f"Agent ID: {agent_id}\n"
-        
+
         if resolved_date:
             file_content += f"Resolved: {resolved_date}\n"
 
@@ -213,14 +223,14 @@ print("Base directory structure created")
 
 if kb_count > 0:
     print(f"Converting {kb_count} knowledge base data...")
-    
+
     kb_df = spark.sql(f"SELECT * FROM {kb_table}")
-    
+
     kb_articles = kb_df.collect()
-    
+
     successful_saves = 0
     failed_saves = 0
-    
+
     for i, article in enumerate(kb_articles):
         try:
             file_path = save_kb_article_to_volume(
@@ -233,19 +243,19 @@ if kb_count > 0:
                 tags=article.tags,
                 last_updated=article.last_updated
             )
-            
+
             if file_path:
                 successful_saves += 1
             else:
                 failed_saves += 1
-                
+
             if (i + 1) % 50 == 0:
                 print(f"Processed {i + 1}/{kb_count} articles...")
-                
+
         except Exception as e:
             print(f"Error processing article {article.kb_id}: {e}")
             failed_saves += 1
-    
+
     print(f"Knowledge Base conversion complete:")
     print(f"  Successfully saved: {successful_saves}")
     print(f"  Failed saves: {failed_saves}")
@@ -261,14 +271,14 @@ else:
 
 if tickets_count > 0:
     print(f"Converting {tickets_count} support tickets...")
-    
+
     tickets_df = spark.sql(f"SELECT * FROM {tickets_table}")
-    
+
     tickets = tickets_df.collect()
-    
+
     successful_saves = 0
     failed_saves = 0
-    
+
     for i, ticket in enumerate(tickets):
         try:
             file_path = save_ticket_to_volume(
@@ -284,19 +294,19 @@ if tickets_count > 0:
                 resolved_date=ticket.resolved_date,
                 agent_id=ticket.agent_id
             )
-            
+
             if file_path:
                 successful_saves += 1
             else:
                 failed_saves += 1
-                
+
             if (i + 1) % 25 == 0:
                 print(f"Processed {i + 1}/{tickets_count} tickets...")
-                
+
         except Exception as e:
             print(f"Error processing ticket {ticket.ticket_id}: {e}")
             failed_saves += 1
-    
+
     print(f"Support Tickets conversion complete:")
     print(f"  Successfully saved: {successful_saves}")
     print(f"  Failed saves: {failed_saves}")
@@ -382,13 +392,13 @@ if 'error' in summary:
 kb_sample_path = Path(volume_path) / "knowledge_base"
 if kb_sample_path.exists():
     sample_files = list(kb_sample_path.rglob("*.txt"))[:3]  # first 3 files
-    
+
     print(f"Knowledge Base Sample Files ({len(sample_files)}):")
     for file_path in sample_files:
         print(f"  File: {file_path.name}")
         print(f"  Path: {file_path.relative_to(Path(volume_path))}")
         print(f"  Size: {file_path.stat().st_size} bytes")
-        
+
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
@@ -403,13 +413,13 @@ if kb_sample_path.exists():
 tickets_sample_path = Path(volume_path) / "support_tickets"
 if tickets_sample_path.exists():
     sample_files = list(tickets_sample_path.rglob("*.txt"))[:3]
-    
+
     print(f"Support Ticket Sample Files ({len(sample_files)}):")
     for file_path in sample_files:
         print(f"  File: {file_path.name}")
         print(f"  Path: {file_path.relative_to(Path(volume_path))}")
         print(f"  Size: {file_path.stat().st_size} bytes")
-        
+
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
@@ -427,7 +437,7 @@ print(f"Volume: {volume_path}")
 print()
 print("You can now use these text files for:")
 print("- Vector search indexing")
-print("- Training data preparation") 
+print("- Training data preparation")
 print("- Content analysis")
 print("- External system integration")
 print("- Backup and archival")
