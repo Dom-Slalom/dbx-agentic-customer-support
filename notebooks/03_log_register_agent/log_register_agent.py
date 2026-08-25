@@ -16,16 +16,16 @@
 dbutils.widgets.text("root_path", "")
 dbutils.widgets.text("env", "dev")
 dbutils.widgets.text("git_commit", "")
-dbutils.widgets.text("uc_catalog", "telco_customer_support_dev")
-dbutils.widgets.text("agent_schema", "agent")
+dbutils.widgets.text("data_catalog", "telco_customer_support_dev")
 dbutils.widgets.text("data_schema", "gold")
+dbutils.widgets.text("agent_catalog", "telco_customer_support_dev")
+dbutils.widgets.text("agent_schema", "agent")
 dbutils.widgets.text("model_name", "telco_customer_support_agent")
 dbutils.widgets.text("experiment_name", "/Shared/telco_support_agent/dev/dev_telco_support_agent")
 dbutils.widgets.text("disable_tools", "")
 
 # COMMAND ----------
 
-import os
 import sys
 
 import mlflow
@@ -60,7 +60,8 @@ mlflow.set_experiment(config.experiment_name)
 print("Configuration:")
 print(f"  Name: {config.agent_name}")
 print(f"  Description: {config.agent_description}")
-print(f"  UC Model: {config.full_model_name}")
+print(f"  UC Model: {config.model_name}")
+print(f"  UC Full Model: {config.full_model_name}")
 print(f"  Input Example: {config.input_example}")
 print(f"  Environment: {config.env}")
 print(f"  Git Commit: {config.git_commit}")

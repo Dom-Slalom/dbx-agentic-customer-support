@@ -13,8 +13,10 @@ class RunEvalsConfig(BaseModel):
     env: str
 
     # Unity Catalog
-    uc_catalog: str
+    agent_catalog: str
     agent_schema: str
+    data_catalog: str
+    data_schema: str
     model_name: str
     model_version: Optional[int] = None  # if not set, use latest
 
@@ -26,9 +28,10 @@ class RunEvalsConfig(BaseModel):
         from telco_support_agent.config.schemas import UCConfig
 
         return UCConfig(
-            agent_catalog=self.uc_catalog,
+            agent_catalog=self.agent_catalog,
+            data_catalog=self.data_catalog,
             agent_schema=self.agent_schema,
-            data_schema="gold",
+            data_schema=self.data_schema,
             model_name=self.model_name,
         )
 
@@ -40,8 +43,9 @@ class LogRegisterConfig(BaseModel):
     env: str
 
     # Unity Catalog
-    uc_catalog: str
+    agent_catalog: str
     agent_schema: str  # UC schema for agent models/functions
+    data_catalog: str
     data_schema: str  # UC schema for data tables
     model_name: str
 
@@ -74,8 +78,9 @@ class LogRegisterConfig(BaseModel):
         from telco_support_agent.config.schemas import UCConfig
 
         return UCConfig(
-            agent_catalog=self.uc_catalog,
+            agent_catalog=self.agent_catalog,
             agent_schema=self.agent_schema,
+            data_catalog=self.data_catalog,
             data_schema=self.data_schema,
             model_name=self.model_name,
         )
@@ -94,7 +99,7 @@ class DeployAgentConfig(BaseModel):
     git_commit: Optional[str] = None
 
     # Unity Catalog
-    uc_catalog: str
+    agent_catalog: str
     agent_schema: str
     model_name: str
     model_version: Optional[int] = None  # if not set, use latest
@@ -138,7 +143,7 @@ Please test various query types and provide feedback on response quality."""
         from telco_support_agent.config.schemas import UCConfig
 
         return UCConfig(
-            agent_catalog=self.uc_catalog,
+            agent_catalog=self.agent_catalog,
             agent_schema=self.agent_schema,
             data_schema="gold",  # data schema not used in deployment
             model_name=self.model_name,

@@ -19,14 +19,14 @@ _logger = logging.getLogger(__name__)
 def run_llm(
     message: str,
     system_prompt: Optional[str] = None,
-    model: str = "system.ai.claude-sonnet-4-6",
+    model: str = "databricks-claude-sonnet-4-6",
 ) -> str:
     """Run LLM query using Databricks deployment client.
 
     Args:
         message: The user message to send to the LLM
         system_prompt: Optional system prompt to include
-        model: The model endpoint to use (default: system.ai.claude-sonnet-4-6)
+        model: The model endpoint to use (default: databricks-claude-sonnet-4-6)
 
     Returns:
         The LLM response content
@@ -77,7 +77,7 @@ If the query spans multiple domains or involves complex interconnected issues ac
 def topic_classification(
     content: str,
     topic_categories: list[dict],
-    model: str = "system.ai.claude-sonnet-4-6",
+    model: str = "databricks-claude-sonnet-4-6",
 ) -> dict[str, str]:
     """Classify content into topics using an LLM.
 

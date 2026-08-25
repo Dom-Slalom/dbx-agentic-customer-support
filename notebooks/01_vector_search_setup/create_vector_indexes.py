@@ -19,7 +19,7 @@
 # COMMAND ----------
 
 dbutils.widgets.text("env", "dev")
-dbutils.widgets.text("uc_catalog", "telco_customer_support_dev")
+dbutils.widgets.text("data_catalog", "telco_customer_support_dev")
 dbutils.widgets.text("data_schema", "gold")
 dbutils.widgets.text("vector_search_endpoint_name", "dev-telco-support-agent-vector-search")
 
@@ -53,7 +53,7 @@ setup_logging()
 # COMMAND ----------
 
 # Get widget values
-uc_catalog = dbutils.widgets.get("uc_catalog")
+data_catalog = dbutils.widgets.get("data_catalog")
 data_schema = dbutils.widgets.get("data_schema")
 vector_search_endpoint_name = dbutils.widgets.get("vector_search_endpoint_name")
 
@@ -62,19 +62,19 @@ print(f"Config path: {config_path}")
 
 # Create UC config - for vector search we only need data catalog/schema
 uc_config = UCConfig(
-    data_catalog=uc_catalog,
+    data_catalog=data_catalog,
     data_schema=data_schema,
 )
 
 vs_manager = VectorSearchManager(
-    config_path=config_path, 
+    config_path=config_path,
     uc_config=uc_config,
     endpoint_name=vector_search_endpoint_name
 )
 
 print("Vector Search Manager initialized successfully")
 print(f"   Environment: {env}")
-print(f"   UC Catalog: {uc_catalog}")
+print(f"   UC Catalog: {data_catalog}")
 print(f"   Data Schema: {data_schema}")
 print(f"   Vector Search Endpoint: {vector_search_endpoint_name}")
 print(f"   Knowledge Base: {vs_manager.kb_table} -> {vs_manager.kb_index_name}")
@@ -177,5 +177,3 @@ for i, result in enumerate(data_array[:3]):
     print(f"  {i+1}. {result[0]} - {result[1]} ({result[2]}, {result[3]})")
 
 # COMMAND ----------
-
-

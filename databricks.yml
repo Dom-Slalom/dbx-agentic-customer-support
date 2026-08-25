@@ -15,6 +15,9 @@ variables:
   data_schema:
     description: Schema for data tables
     default: gold
+  tech_support_volume:
+    description: Volume for synthetic Telco customer support data
+    default: tech_support
   model_name:
     description: Model name in UC
     default: telco_customer_support_agent

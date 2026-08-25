@@ -35,7 +35,7 @@ from telco_support_agent.data.generators.products import ProductGenerator
 
 dbutils.widgets.text("root_path", "")
 dbutils.widgets.text("env", "dev")
-dbutils.widgets.text("uc_catalog", "telco_customer_support_dev")
+dbutils.widgets.text("data_catalog", "telco_customer_support_dev")
 dbutils.widgets.text("data_schema", "gold")
 dbutils.widgets.text("generate_all", "False")
 
@@ -44,7 +44,7 @@ dbutils.widgets.text("generate_all", "False")
 
 env = dbutils.widgets.get("env")
 print(f"Running data generation for {env} environment")
-catalog = dbutils.widgets.get("uc_catalog")
+catalog = dbutils.widgets.get("data_catalog")
 schema = dbutils.widgets.get("data_schema")
 
 
@@ -100,7 +100,7 @@ product_gen = ProductGenerator(CONFIG)
 # MAGIC ### Plans
 
 # COMMAND ----------
-catalog = dbutils.widgets.get("uc_catalog")
+catalog = dbutils.widgets.get("data_catalog")
 schema = dbutils.widgets.get("data_schema")
 
 if should_generate("plans"):
@@ -349,7 +349,11 @@ knowledge_gen = KnowledgeGenerator(CONFIG)
 if should_generate("kb_articles"):
     kb_df = knowledge_gen.generate_kb_articles()
     print(f"Generated {kb_df.count()} knowledge base articles")
-    knowledge_gen.save_to_delta(kb_df, f"{catalog}.{schema}.knowledge_base")
+    knowledge_gen.save_to_delta(
+        kb_df,
+        f"{catalog}.{schema}.knowledge_base",
+        enable_change_data_feed=True
+    )
 else:
     kb_df = load_existing_table("knowledge_base")
     print("Using existing knowledge base data")
@@ -371,7 +375,11 @@ if should_generate("support_tickets"):
         devices_df=devices_df
     )
     print(f"Generated {tickets_df.count()} support tickets")
-    knowledge_gen.save_to_delta(tickets_df, f"{catalog}.{schema}.support_tickets")
+    knowledge_gen.save_to_delta(
+            tickets_df,
+            f"{catalog}.{schema}.support_tickets",
+            enable_change_data_feed=True
+        )
 else:
     tickets_df = load_existing_table("support_tickets")
     print("Using existing support tickets data")

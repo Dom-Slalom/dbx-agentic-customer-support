@@ -119,6 +119,7 @@ class BaseGenerator:
         df: DataFrame,
         table_name: str,
         mode: str = "overwrite",
+        enable_change_data_feed: bool = False,
         partition_by: list[str] | None = None,
     ) -> None:
         """Save DataFrame to Delta table.
@@ -127,9 +128,18 @@ class BaseGenerator:
             df: DataFrame to save.
             table_name: Name of the Delta table.
             mode: Write mode (overwrite, append, etc.).
+            enable_change_data_feed: Whether to enable change data feed.
             partition_by: Columns to partition by.
         """
-        writer = df.write.format("delta").option("overwriteSchema", "true").mode(mode)
+        writer = (
+            df.write.format("delta")
+            .option("overwriteSchema", "true")
+            .option(
+                "delta.enableChangeDataFeed",
+                "true" if enable_change_data_feed else "false",
+            )
+            .mode(mode)
+        )
 
         if partition_by:
             writer = writer.partitionBy(*partition_by)

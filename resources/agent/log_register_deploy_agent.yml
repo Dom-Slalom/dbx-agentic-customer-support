@@ -5,18 +5,43 @@
 # 2. deploy_agent: Deploys the registered agent using Agent Framework to Databricks model serving endpoint
 
 resources:
+  schemas:
+    agent_schema:
+      name: ${var.agent_schema}
+      catalog_name: ${var.uc_catalog}
+      comment: "Schema for agent metadata and configuration"
+
   jobs:
+
     log_register_deploy_agent:
       name: telco_log_register_deploy_agent_${bundle.target}
       tasks:
+        - task_key: register_uc_functions
+          notebook_task:
+            notebook_path: ../../notebooks/03_log_register_agent/register_uc_functions.py
+            base_parameters:
+              root_path: ${workspace.root_path}/files
+              env: ${bundle.target}
+              agent_catalog: ${var.uc_catalog}
+              agent_schema: ${var.agent_schema}
+              data_catalog: ${var.uc_catalog}
+              data_schema: ${var.data_schema}
+              model_name: ${var.model_name}
+              experiment_name: ${var.experiment_name}
+              disable_tools: ${var.disable_tools}
+              git_commit: ${bundle.git.commit}
+
         - task_key: log_register_agent
+          depends_on:
+            - task_key: register_uc_functions
           notebook_task:
             notebook_path: ../../notebooks/03_log_register_agent/log_register_agent.py
             base_parameters:
               root_path: ${workspace.root_path}/files
               env: ${bundle.target}
-              uc_catalog: ${var.uc_catalog}
+              agent_catalog: ${var.uc_catalog}
               agent_schema: ${var.agent_schema}
+              data_catalog: ${var.uc_catalog}
               data_schema: ${var.data_schema}
               model_name: ${var.model_name}
               experiment_name: ${var.experiment_name}
@@ -31,7 +56,7 @@ resources:
             base_parameters:
               root_path: ${workspace.root_path}/files
               env: ${bundle.target}
-              uc_catalog: ${var.uc_catalog}
+              agent_catalog: ${var.uc_catalog}
               agent_schema: ${var.agent_schema}
               model_name: ${var.model_name}
               endpoint_name: ${var.endpoint_name}

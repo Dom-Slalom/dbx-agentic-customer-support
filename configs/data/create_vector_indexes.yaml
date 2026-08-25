@@ -7,7 +7,7 @@ endpoint:
 
 # Embedding model configuration
 embedding:
-  model_endpoint: databricks-bge-large-en
+  model_endpoint: databricks-qwen3-embedding-0-6b
 
 indexes:
   knowledge_base:
@@ -18,14 +18,14 @@ indexes:
     embedding_source_column: formatted_content
     description: Vector search index for knowledge base articles, policies, FAQs, and guides
     columns_to_sync:
-      - kb_id          
-      - content         
-      - title           
-      - category        
-      - subcategory     
-      - content_type    
-      - tags            
-      - last_updated    
+      - kb_id
+      - content
+      - title
+      - category
+      - subcategory
+      - content_type
+      - tags
+      - last_updated
     test_queries:
       - unexpected charges on my bill
       - how to cancel service
@@ -39,16 +39,16 @@ indexes:
     embedding_source_column: formatted_content
     description: Vector search index for historical support tickets
     columns_to_sync:
-      - ticket_id       
-      - description    
-      - customer_id    
-      - category       
-      - priority        
-      - status         
-      - resolution      
-      - created_date   
-      - resolved_date   
-      - agent_id        
+      - ticket_id
+      - description
+      - customer_id
+      - category
+      - priority
+      - status
+      - resolution
+      - created_date
+      - resolved_date
+      - agent_id
     test_queries:
       - phone won't connect to network
       - iPhone setup failed

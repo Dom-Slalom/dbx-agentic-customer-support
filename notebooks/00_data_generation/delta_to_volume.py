@@ -36,7 +36,7 @@ if root_path:
 
 dbutils.widgets.text("root_path", "")
 dbutils.widgets.text("env", "dev")
-dbutils.widgets.text("uc_catalog", "telco_customer_support_dev")
+dbutils.widgets.text("data_catalog", "telco_customer_support_dev")
 dbutils.widgets.text("data_schema", "gold")
 dbutils.widgets.text("volume_schema", "gold")
 
@@ -45,7 +45,7 @@ dbutils.widgets.text("volume_schema", "gold")
 
 env = "prod"
 
-volume_catalog = dbutils.widgets.get("uc_catalog")
+volume_catalog = dbutils.widgets.get("data_catalog")
 volume_schema = dbutils.widgets.get("volume_schema")
 volume_name = "tech_support"
 data_schema = dbutils.widgets.get("data_schema")
@@ -54,7 +54,7 @@ volume_path = f"/Volumes/{volume_catalog}/{volume_schema}/{volume_name}"
 print(f"Target volume path: {volume_path}")
 
 # Source tables
-source_catalog = dbutils.widgets.get("uc_catalog")
+source_catalog = dbutils.widgets.get("data_catalog")
 kb_table = f"{source_catalog}.{data_schema}.knowledge_base"
 tickets_table = f"{source_catalog}.{data_schema}.support_tickets"
 

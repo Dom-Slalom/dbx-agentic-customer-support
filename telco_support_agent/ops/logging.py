@@ -83,6 +83,7 @@ def log_agent(
         resources = _get_supervisor_resources(
             uc_config.agent_catalog,
             uc_config.agent_schema,
+            uc_config.data_catalog,
             uc_config.data_schema,
             config_dir,
         )
@@ -189,7 +190,11 @@ def _collect_config_artifacts(config_dir: Path) -> dict[str, str]:
 
 
 def _get_supervisor_resources(
-    uc_catalog: str, agent_schema: str, data_schema: str, config_dir: Path
+    agent_catalog: str,
+    agent_schema: str,
+    data_catalog: str,
+    data_schema: str,
+    config_dir: Path,
 ) -> list[Resource]:
     """Get all resources needed by the supervisor agent."""
     import yaml
@@ -225,7 +230,7 @@ def _get_supervisor_resources(
     uc_functions = set()
     for functions in DOMAIN_FUNCTION_MAP.values():
         for func_name in functions:
-            uc_func_name = f"{uc_catalog}.{agent_schema}.{func_name}"
+            uc_func_name = f"{agent_catalog}.{agent_schema}.{func_name}"
             if uc_func_name not in uc_functions:
                 resources.append(DatabricksFunction(function_name=uc_func_name))
                 uc_functions.add(uc_func_name)

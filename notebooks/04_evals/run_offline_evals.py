@@ -17,7 +17,7 @@
 dbutils.widgets.text("experiment_name", "/Shared/telco_support_agent/dev/dev_telco_support_agent")
 dbutils.widgets.text("model_version", "")
 dbutils.widgets.text("env", "dev")
-dbutils.widgets.text("uc_catalog", "telco_customer_support_dev")
+dbutils.widgets.text("agent_catalog", "telco_customer_support_dev")
 dbutils.widgets.text("agent_schema", "agent")
 dbutils.widgets.text("model_name", "telco_customer_support_agent")
 
@@ -158,7 +158,7 @@ if len(eval_traces) > 0:
     print("Sample assessments from first trace:")
     sample_assessments = eval_traces.iloc[0]['assessments']
     for assessment in sample_assessments:
-        print(f"  - {assessment["assessment_name"]}: {assessment["feedback"]["value"]}")
+        print(f'  - {assessment["assessment_name"]}: {assessment["feedback"]["value"]}')
         if "rationale" in assessment:
-            print(f"    Rationale: {assessment["rationale"]}")
+            print(f'    Rationale: {assessment["rationale"]}')
         print()

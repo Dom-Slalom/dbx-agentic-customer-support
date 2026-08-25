@@ -82,9 +82,10 @@ class WidgetConfigLoader:
         # for local testing get basic required fields
         minimal_data = {
             "env": "dev",
-            "uc_catalog": "telco_customer_support_dev",
-            "agent_schema": "agent",
+            "data_catalog": "telco_customer_support_dev",
             "data_schema": "gold",
+            "agent_catalog": "telco_customer_support_dev",
+            "agent_schema": "agent",
             "model_name": "telco_customer_support_agent",
             "experiment_name": "/Shared/telco_support_agent/dev/dev_telco_support_agent",
             "endpoint_name": "dev-telco-customer-support-agent",
