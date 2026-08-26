@@ -40,7 +40,10 @@ class BillingAgent(BaseAgent):
             "billing",
             uc_config
             or UCConfig(
-                agent_catalog="telco_customer_support_prod", data_schema="gold"
+                agent_catalog="telco_customer_support_prod_2",
+                agent_schema="agent",
+                data_catalog="telco_customer_support_prod_2",
+                data_schema="gold",
             ),
         )
 

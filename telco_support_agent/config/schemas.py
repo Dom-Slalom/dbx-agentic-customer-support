@@ -17,13 +17,13 @@ class LLMConfig(BaseModel):
 class UCConfig(BaseModel):
     """Unity Catalog configuration with separation of data reading vs agent artifacts."""
 
-    # For reading data (customer info, billing, etc.) - always prod
-    data_catalog: str = "telco_customer_support_prod"
-    data_schema: str = "gold"
+    # For reading data (customer info, billing, etc.)
+    data_catalog: str
+    data_schema: str
 
     # For agent artifacts (functions, models) - environment specific
-    agent_catalog: str = "telco_customer_support_prod"  # Default to prod for testing
-    agent_schema: str = "agent"
+    agent_catalog: str
+    agent_schema: str
     model_name: str = "telco_customer_support_agent"
 
     def get_uc_function_name(self, function_name: str) -> str:

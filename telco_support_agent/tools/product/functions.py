@@ -196,8 +196,9 @@ def register_customer_devices_info(uc_config: UCConfig):
 if __name__ == "__main__":
     # Default UC config for auto-registration
     uc_config = UCConfig(
-        agent_catalog="telco_customer_support_prod",
+        agent_catalog="telco_customer_support_prod_7",
         agent_schema="agent",
+        data_catalog="telco_customer_support_prod_7",
         data_schema="gold",
         model_name="telco_customer_support_agent",
     )

@@ -68,6 +68,7 @@ exclude = [
     "*.ipynb",
     ".pytest_cache",
     "dist",
+    "__builtins__.pyi"
 ]
 
 [tool.ruff.lint]

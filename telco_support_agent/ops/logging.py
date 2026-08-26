@@ -252,7 +252,6 @@ def _get_supervisor_resources(
         logger.info(f"Added system function: {sys_func}")
 
     # Vector Search indexes - always use prod catalog for data reading
-    data_catalog = "telco_customer_support_prod"
     vector_indexes = [
         f"{data_catalog}.{data_schema}.knowledge_base_index",
         f"{data_catalog}.{data_schema}.support_tickets_index",

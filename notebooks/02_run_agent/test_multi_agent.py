@@ -41,9 +41,25 @@ for agent_type in AgentType:
 
 # COMMAND ----------
 
+dbutils.widgets.text("root_path", "")
+dbutils.widgets.text("env", "dev")
+dbutils.widgets.text("git_commit", "")
+dbutils.widgets.text("data_catalog", "telco_customer_support_dev")
+dbutils.widgets.text("data_schema", "gold")
+dbutils.widgets.text("agent_catalog", "telco_customer_support_dev")
+dbutils.widgets.text("agent_schema", "agent")
+dbutils.widgets.text("model_name", "telco_customer_support_agent")
+dbutils.widgets.text("experiment_name", "/Shared/telco_support_agent/dev/dev_telco_support_agent")
+dbutils.widgets.text("disable_tools", "")
+
+# COMMAND ----------
+
 # UC config for testing - only need data reading capabilities
 uc_config = UCConfig(
-    # Uses defaults: data_catalog="telco_customer_support_prod", data_schema="gold"
+    data_catalog=dbutils.widgets.get("data_catalog"),
+    data_schema=dbutils.widgets.get("data_schema"),
+    agent_catalog=dbutils.widgets.get("agent_catalog"),
+    agent_schema=dbutils.widgets.get("agent_schema")
 )
 
 print("Unity Catalog Configuration:")
