@@ -101,6 +101,8 @@ class DeployAgentConfig(BaseModel):
     # Unity Catalog
     agent_catalog: str
     agent_schema: str
+    data_catalog: str
+    data_schema: str
     model_name: str
     model_version: Optional[int] = None  # if not set, use latest
 
@@ -145,7 +147,8 @@ Please test various query types and provide feedback on response quality."""
         return UCConfig(
             agent_catalog=self.agent_catalog,
             agent_schema=self.agent_schema,
-            data_schema="gold",  # data schema not used in deployment
+            data_catalog=self.data_catalog,
+            data_schema=self.data_schema,  # data schema not used in deployment
             model_name=self.model_name,
         )
 

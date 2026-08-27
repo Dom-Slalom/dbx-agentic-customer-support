@@ -58,6 +58,8 @@ resources:
               env: ${bundle.target}
               agent_catalog: ${var.uc_catalog}
               agent_schema: ${var.agent_schema}
+              data_catalog: ${var.uc_catalog}
+              data_schema: ${var.data_schema}
               model_name: ${var.model_name}
               endpoint_name: ${var.endpoint_name}
               scale_to_zero_enabled: ${var.scale_to_zero_enabled}

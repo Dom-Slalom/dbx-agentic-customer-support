@@ -1,9 +1,9 @@
 # HTTP client for Databricks API calls
-httpx==0.25.2
+httpx>=0.25.2
 
-# Configuration management  
-pydantic[email]==2.5.0
-pydantic-settings==2.1.0
+# Configuration management
+pydantic[email]>=2.5.0
+pydantic-settings>=2.1.0
 python-dotenv==1.0.0
 
 # YAML configuration
