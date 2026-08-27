@@ -299,11 +299,13 @@ class VectorSearchManager:
 
             while True:
                 status_info = index.describe()
-                state = status_info.get("status", {}).get("detailed_state", "UNKNOWN")
+                state: str = status_info.get("status", {}).get(
+                    "detailed_state", "UNKNOWN"
+                )
 
                 logger.info(f"   Current state: {state}")
 
-                if state == "ONLINE":
+                if state == "ONLINE_NO_PENDING_UPDATE":
                     logger.info(f"{index_name} is ONLINE and ready!")
                     break
                 elif state in ["FAILED", "CANCELLED"]:

@@ -64,6 +64,8 @@ print(f"Config path: {config_path}")
 uc_config = UCConfig(
     data_catalog=data_catalog,
     data_schema=data_schema,
+    agent_catalog="",
+    agent_schema=""
 )
 
 vs_manager = VectorSearchManager(
